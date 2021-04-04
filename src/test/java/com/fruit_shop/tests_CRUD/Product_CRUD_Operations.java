@@ -233,6 +233,36 @@ public class Product_CRUD_Operations extends TestBase{
                         .then()
                         .log().all()
                         .statusCode(200).extract().jsonPath();
+        System.out.println("******************************************");
+        System.out.println("******************************************");
+        System.out.println("******************************************");
+
+
+        int count  = jp.getInt("meta.count");
+        System.out.println("count = " + count);
+
+        int itemsPerPage  = jp.getInt("meta.limit");
+        System.out.println("itemsPerPage = " + itemsPerPage);
+
+        int numberOfPages = ((count % itemsPerPage) == 0) ? (count/itemsPerPage) : (count/itemsPerPage +1);
+        System.out.println("numberOfPages = " + numberOfPages);
+
+
+        List<String> allProductNames = new LinkedList<>();
+        for (int i = 1; i <=15 ; i++) {
+            JsonPath jp2 =
+            given()
+                    .log().uri()
+
+                    .when()
+                    .get("/products/?page="+i+"&limit=10").jsonPath();
+
+            allProductNames.addAll(jp2.getList("products.name"));
+
+        }
+
+        allProductNames.forEach(p-> System.out.printf("%20s",p +"  ||  "));
+
 
     }
 
