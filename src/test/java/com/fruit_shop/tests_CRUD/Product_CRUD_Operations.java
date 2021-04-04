@@ -141,6 +141,38 @@ public class Product_CRUD_Operations extends TestBase{
         listOfProductIDs.forEach(p-> System.out.println(p));
 
 
+        Random rand = new Random();
+        int randomNumber = rand.nextInt(listOfProductIDs.size()); //0-9
+
+        Integer luckyProductIDWinner = listOfProductIDs.get(randomNumber);
+        System.out.println("luckyProductIDWinner = " + luckyProductIDWinner);
+
+        Faker faker1 = new Faker();
+
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        // PATCH /products/{id}
+        given()
+                .log().uri()
+                .pathParam("idOfProduct", luckyProductIDWinner)
+                .contentType("application/json")
+                .body("{\n" +
+                        "  \"name\": \""+faker1.food().vegetable()+"\",\n" +
+                        "  \"price\": 900\n" +
+                        "}")
+
+                .when()
+                .patch("/products/{idOfProduct}")
+
+                .then()
+                .statusCode(200)
+                .log().all();
 
     }
 
