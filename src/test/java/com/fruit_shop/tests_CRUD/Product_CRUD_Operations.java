@@ -130,6 +130,16 @@ public class Product_CRUD_Operations extends TestBase{
                 .then()
                 .log().all()
                 .statusCode(200).extract().jsonPath();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
 
         List<String> listOfProductURL = jp.getList("products.product_url", String.class);
         listOfProductURL.forEach(p-> System.out.println(p));
@@ -175,6 +185,59 @@ public class Product_CRUD_Operations extends TestBase{
                 .log().all();
 
     }
+
+
+
+
+    //GET /products/{id}/photo
+    @DisplayName("Get a photo of a product")
+    @Test
+    public void get_Photo_Of_Product(){
+
+        given()
+                .log().uri()
+                .pathParam("id", 33)
+                .accept("image/jpeg")
+
+                .when()
+                .get("/products/{id}/photo")
+
+                .then()
+                .contentType("image/jpeg")
+                .log().all()
+                .statusCode(200);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    //Get all 140+ product names
+    @DisplayName("GET /products/  -> /?page=2&limit=10")
+    @Test
+    public void getALLProductNames(){
+
+        JsonPath jp =
+                given()
+                        .log().uri()
+
+                        .when()
+                        .get("/products/")
+
+                        .then()
+                        .log().all()
+                        .statusCode(200).extract().jsonPath();
+
+    }
+
+
+
 
 
 
