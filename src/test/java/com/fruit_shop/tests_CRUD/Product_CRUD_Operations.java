@@ -105,50 +105,45 @@ public class Product_CRUD_Operations extends TestBase{
 
 
 
-    public static List<Integer> getAllIDs(){
+
+
+
+
+    //*****************************************************************************************
+    //*****************************************************************************************
+    //*****************************************************************************************
+    //*****************************************************************************************
+
+
+    //Update the name and price of the product
+    @DisplayName("PATCH /products/{id}")
+    @Test
+    public void update_Name_and_Price_Of_Product(){
+
         JsonPath jp =
-                given()
-                        .log().uri()
+        given()
+                .log().uri()
 
-                        .when()
-                        .get("/vendors/")
+                .when()
+                .get("/products/")
 
-                        .then()
+                .then()
+                .log().all()
+                .statusCode(200).extract().jsonPath();
 
-                        .log().all()
-                        .statusCode(200)
-                        .extract().jsonPath();
+        List<String> listOfProductURL = jp.getList("products.product_url", String.class);
+        listOfProductURL.forEach(p-> System.out.println(p));
 
+        List<Integer> listOfProductIDs = new LinkedList<>();
+        listOfProductURL.forEach(p-> listOfProductIDs.add(Integer.parseInt(p.substring(p.lastIndexOf("/")+1))));
 
-
-        System.out.println("==============================================");
-        System.out.println();
-        List<String> allVendorURL = jp.getList("vendors.vendor_url");
-        allVendorURL.forEach(p-> System.out.println(p));
-
-        List<Integer> allIDs = new LinkedList<>();
-        allVendorURL.forEach(p-> allIDs.add(Integer.parseInt(p.substring(p.lastIndexOf("/")+1))));
-        allIDs.forEach(p-> System.out.println(p));
-
-        return allIDs;
-    }
+        System.out.println("==============================");
+        listOfProductIDs.forEach(p-> System.out.println(p));
 
 
-    public static Map<String,Object> getRandomProduct(){
-
-
-        Faker faker1  = new Faker();
-
-        Map<String, Object> fruitObject = new LinkedHashMap<>();
-        String colorName = faker1.color().name();
-        fruitObject.put("name", colorName.substring(0,1).toUpperCase()+colorName.substring(1) +" "+faker1.food().fruit() );
-        fruitObject.put("price", faker1.number().numberBetween(1,100) );
-        fruitObject.put("category", faker1.demographic().race() );
-
-
-        return fruitObject;
 
     }
+
 
 
 
