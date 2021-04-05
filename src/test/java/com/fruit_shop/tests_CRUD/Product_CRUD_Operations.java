@@ -1,9 +1,9 @@
 package com.fruit_shop.tests_CRUD;
 
 
-import com.fruit_shop.utils.TestBase;
+import com.fruit_shop.utils.TestBase_FruitShop;
 import com.github.javafaker.Faker;
-import io.restassured.RestAssured;
+
 import static io.restassured.RestAssured.*;
 
 import static org.hamcrest.Matchers.*;
@@ -16,7 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
 
-public class Product_CRUD_Operations extends TestBase{
+public class Product_CRUD_Operations extends TestBase_FruitShop {
 
 
 
