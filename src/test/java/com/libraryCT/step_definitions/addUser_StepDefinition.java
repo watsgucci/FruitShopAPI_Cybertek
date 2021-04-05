@@ -42,6 +42,8 @@ public class addUser_StepDefinition {
     }
 
 
+    Integer userIDOfCreatedUser = 0;
+
     // POST /add_user -> Add User to system
     @When("Librarian adding an new user with an add user end point")
     public void librarian_adding_an_new_user_with_an_add_user_end_point() {
@@ -63,7 +65,7 @@ public class addUser_StepDefinition {
 
 
 
-
+        userIDOfCreatedUser =
         given()
                 .log().uri()
                 .header("x-library-token", token)
@@ -77,18 +79,35 @@ public class addUser_StepDefinition {
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("message", is("The user has been created."));
-
-
-
-
-
+                .body("message", is("The user has been created.")).extract().jsonPath().getInt("user_id");
 
     }
 
-
+    // GET /get_user_by_id/{id}   -> Get User By ID
     @Then("new user is successfully created with status code {int}")
     public void new_user_is_successfully_created_with_status_code(Integer int1) {
+        System.out.println("==================================");
+        System.out.println("==================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        given()
+                .log().uri()
+                .pathParam("id", userIDOfCreatedUser)
+                .header("x-library-token", token)
+                .accept(ContentType.JSON)
+
+                .when()
+                .get("/get_user_by_id/{id}")
+
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("id", is(equalTo(userIDOfCreatedUser.toString())));
+
+
 
     }
 
