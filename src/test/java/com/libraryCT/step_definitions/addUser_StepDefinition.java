@@ -1,11 +1,17 @@
 package com.libraryCT.step_definitions;
 
+import com.github.javafaker.Faker;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 
+import static org.hamcrest.Matchers.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -40,21 +46,43 @@ public class addUser_StepDefinition {
     @When("Librarian adding an new user with an add user end point")
     public void librarian_adding_an_new_user_with_an_add_user_end_point() {
 
-        Map<String, Object> userInfo = new LinkedHashMap<>();
-        userInfo.put("full_name", "");
-        userInfo.put("email", "");
-        userInfo.put("password", "");
-        userInfo.put("user_group_id", "");
-        userInfo.put("status", "");
-        userInfo.put("start_date", "");
-        userInfo.put("end_date", "");
-        userInfo.put("address", "");
+        Faker faker = new Faker();
+
+        Map<String,Object> myBookMap = new LinkedHashMap<>();
+
+        DateTimeFormatter df=DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        myBookMap.put("full_name",faker.name().fullName());
+        myBookMap.put("email",faker.internet().emailAddress());
+        myBookMap.put("password",faker.internet().password(8,15));
+        myBookMap.put("user_group_id",faker.number().numberBetween(2,3));
+        myBookMap.put("status","ACTIVE");
+        myBookMap.put("start_date",df.format(LocalDate.now()));
+        myBookMap.put("end_date",df.format(LocalDate.now().plusMonths(2)));
+        myBookMap.put("address",faker.address().fullAddress());
+
 
 
 
         given()
                 .log().uri()
                 .header("x-library-token", token)
+                .contentType(ContentType.JSON)
+                .body(myBookMap)
+                .accept(ContentType.JSON)
+
+                .when()
+                .post("/add_user")
+
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("message", is("The user has been created."));
+
+
+
+
+
 
     }
 
